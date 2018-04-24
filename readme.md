@@ -73,7 +73,7 @@ $model->whereDoesntHave('phone',function($q){
 ```
 ### `join` your model with whatever you want
 Don't be stress to `join` with a model to another `table`,`model`,`query` query builder gives us opportunity to do different types of joining.
-```
+```php
 $model = Model::query();
 $model->join('table2','model.id','=','model.user_id');
 $model->leftJoin('table2','model.id','=','model.user_id');
@@ -85,3 +85,19 @@ $model->join(DB::raw("(SELECT * FROM omuk where tomuk IS NULL) O"),function($q){
     $q->on('O.id','=','K.name')
 })
 ```  
+### Use of Ordering, Grouping, Limit, Offset
+```php
+$query = Model::query();
+$query->orderBy('column1','asc')->orderBy('column2','desc');
+$query->orderByRaw("(column1 - column3) asc, column2 desc");
+$query->latest(); // 'created_at asc'
+$query->oldest(); // 'created_at desc'
+$query->inRandomOrder(); // random result
+
+$query->groupBy('column','column2');
+
+$query->skip(5); // skip and take both 
+$query->take(2);
+$query->offset(5); // offset and limit both
+$query->limit(2);
+```
