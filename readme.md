@@ -3,7 +3,7 @@
 
 #### `SELECT` your table columns in different way
 You can use any type of method to *select table columns* for your expected result.
-```
+```php
 $user = User::query();
 $user->select('`name` as another_name','age','onanno');
 $user->select(['name','age','onanno',DB::raw('count(*) as user_count')]);
@@ -13,7 +13,7 @@ $user->addSelect('column1','column2');
 
 ### Writing *`where` clause* 
 Boost up your query writing skill with eloquent to know different type of use of `where` clause
-```
+```php
 $model = Model::where('age',20); // where age = 20
 $model->where(age,'<',20); // where age < 20
 $model->where([
@@ -71,3 +71,17 @@ $model->whereDoesntHave('phone',function($q){
     $q->whereActive(0);
 });
 ```
+### `join` your model with whatever you want
+Don't be stress to `join` with a model to another `table`,`model`,`query` query builder gives us opportunity to do different types of joining.
+```
+$model = Model::query();
+$model->join('table2','model.id','=','model.user_id');
+$model->leftJoin('table2','model.id','=','model.user_id');
+$model->join('table2',function($q){
+    $q->on('model.id','=','model.user_id');
+    $q->whereStatus('active')
+);
+$model->join(DB::raw("(SELECT * FROM omuk where tomuk IS NULL) O"),function($q){
+    $q->on('O.id','=','K.name')
+})
+```  
